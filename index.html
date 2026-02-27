@@ -1,1 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanya Pandey — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5E6D2;
+    --peach: #FCD5BA;
+    --pink: #F6A6B5;
+    --salmon: #F2B4A6;
+    --mauve: #D98B9A;
+    --dark: #2a1f1f;
+    --mid: #6b4a4a;
+  }
 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #faf6f2;
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5vw;
+    background: rgba(250,246,242,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(217,139,154,0.15);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--mauve);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--mauve); }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 0 8vw;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-circle {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+  .hero-bg-circle.c1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, var(--pink), transparent);
+    top: -100px; right: -100px;
+    animation: float 8s ease-in-out infinite;
+  }
+  .hero-bg-circle.c2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, var(--peach), transparent);
+    bottom: -80px; left: -80px;
+    animation: float 10s ease-in-out infinite reverse;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-20px) scale(1.03); }
+  }
+
+  .hero-left { position: relative; z-index: 2; }
+
+  .hero-tag {
+    display: inline-block;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    background: rgba(217,139,154,0.12);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    margin-bottom: 1.8rem;
+    border: 1px solid rgba(217,139,154,0.3);
+    opacity: 0;
+    animation: fadeUp 0.6s 0.3s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+    min-height: 2.2em;
+  }
+
+  .cursor {
+    display: inline-block;
+    width: 3px;
+    height: 0.85em;
+    background: var(--mauve);
+    vertical-align: middle;
+    margin-left: 4px;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .hero-about {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--mid);
+    max-width: 480px;
+    min-height: 5em;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 3.5s forwards;
+  }
+
+  .btn-primary {
+    padding: 0.85rem 2.2rem;
+    background: linear-gradient(135deg, var(--mauve), var(--pink));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(217,139,154,0.35);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(217,139,154,0.45);
+  }
+
+  .btn-outline {
+    padding: 0.85rem 2.2rem;
+    background: transparent;
+    color: var(--mauve);
+    border: 1.5px solid var(--mauve);
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover {
+    background: var(--mauve);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  /* PHOTO */
+  .hero-right {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeIn 1s 0.4s forwards;
+  }
+
+  .photo-frame {
+    position: relative;
+    width: 270px;
+    height: 330px;
+  }
+
+  .photo-bg-shape {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(145deg, var(--peach), var(--pink));
+    border-radius: 60% 40% 55% 45% / 50% 45% 55% 50%;
+    animation: morphShape 8s ease-in-out infinite;
+  }
+
+  @keyframes morphShape {
+    0%, 100% { border-radius: 60% 40% 55% 45% / 50% 45% 55% 50%; }
+    25% { border-radius: 45% 55% 40% 60% / 55% 50% 50% 45%; }
+    50% { border-radius: 55% 45% 60% 40% / 45% 55% 45% 55%; }
+    75% { border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%; }
+  }
+
+  .photo-placeholder {
+    position: absolute;
+    inset: 15px;
+    border-radius: 55% 45% 50% 50% / 48% 48% 52% 52%;
+    background: linear-gradient(165deg, var(--cream) 0%, var(--peach) 60%, var(--salmon) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 3px solid rgba(255,255,255,0.6);
+  }
+
+  .photo-icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+
+  .photo-icon svg { width: 50px; height: 50px; fill: var(--mauve); opacity: 0.7; }
+
+  .photo-label {
+    font-size: 0.75rem;
+    color: var(--mauve);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .photo-deco {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border: 2px solid rgba(217,139,154,0.4);
+    border-radius: 50%;
+  }
+  .photo-deco.d1 { top: -20px; right: -20px; }
+  .photo-deco.d2 { bottom: -10px; left: -30px; width: 60px; height: 60px; }
+
+  /* DIVIDER */
+  .section-divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--peach), var(--pink), var(--peach), transparent);
+    margin: 0;
+  }
+
+  /* SECTIONS */
+  section { padding: 7rem 8vw; }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .section-label-line {
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(to right, var(--mauve), var(--pink));
+    border-radius: 2px;
+  }
+
+  .section-label-text {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    font-weight: 500;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 3.5rem;
+    line-height: 1.1;
+  }
+
+  /* EXPERIENCE */
+  #experience { background: #faf6f2; }
+
+  .exp-timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .exp-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--pink), var(--mauve));
+    border-radius: 2px;
+  }
+
+  .exp-item {
+    position: relative;
+    padding: 2rem 2rem 2.5rem 3rem;
+    margin-bottom: 1.5rem;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid rgba(217,139,154,0.1);
+    box-shadow: 0 4px 24px rgba(217,139,154,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+
+  .exp-item:hover {
+    transform: translateX(6px);
+    box-shadow: 0 8px 40px rgba(217,139,154,0.18);
+    border-color: rgba(217,139,154,0.25);
+  }
+
+  .exp-item::before {
+    content: '';
+    position: absolute;
+    left: -2.65rem;
+    top: 2.2rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mauve), var(--pink));
+    border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--mauve);
+  }
+
+  .exp-date {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+
+  .exp-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.3rem;
+  }
+
+  .exp-company {
+    font-size: 0.9rem;
+    color: var(--mid);
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+
+  .exp-desc {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #8a6a6a;
+    font-weight: 300;
+  }
+
+  .exp-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 20px;
+    background: rgba(242,180,166,0.15);
+    color: var(--mauve);
+    border: 1px solid rgba(217,139,154,0.2);
+    margin: 0.8rem 0.3rem 0 0;
+    letter-spacing: 0.06em;
+  }
+
+  /* PROJECTS */
+  #projects { background: white; }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+
+  .project-card {
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    cursor: default;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s;
+    border: 1px solid rgba(217,139,154,0.12);
+    box-shadow: 0 4px 24px rgba(217,139,154,0.08);
+  }
+
+  .project-card:hover {
+    transform: translateY(-10px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(217,139,154,0.22);
+  }
+
+  .project-card-top {
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .project-card:nth-child(1) .project-card-top { background: linear-gradient(135deg, var(--cream), var(--peach)); }
+  .project-card:nth-child(2) .project-card-top { background: linear-gradient(135deg, var(--peach), var(--pink)); }
+  .project-card:nth-child(3) .project-card-top { background: linear-gradient(135deg, var(--pink), var(--mauve)); }
+  .project-card:nth-child(4) .project-card-top { background: linear-gradient(135deg, var(--salmon), var(--peach)); }
+
+  .project-card-icon {
+    font-size: 3rem;
+    opacity: 0.6;
+    filter: grayscale(0.3);
+  }
+
+  .project-deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+  .project-deco-circle.pc1 { width: 120px; height: 120px; top: -30px; right: -30px; }
+  .project-deco-circle.pc2 { width: 70px; height: 70px; bottom: -15px; left: 20px; }
+
+  .project-card-body {
+    background: white;
+    padding: 1.8rem;
+  }
+
+  .project-number {
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    opacity: 0.7;
+  }
+
+  .project-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 0.7rem;
+    line-height: 1.2;
+  }
+
+  .project-desc {
+    font-size: 0.87rem;
+    line-height: 1.7;
+    color: #8a6a6a;
+    font-weight: 300;
+    margin-bottom: 1.2rem;
+  }
+
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mauve);
+    font-weight: 500;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s, gap 0.2s;
+  }
+
+  .project-link:hover { border-bottom-color: var(--mauve); gap: 0.7rem; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 3.5rem;
+    background: var(--dark);
+    color: rgba(255,255,255,0.4);
+    font-size: 0.82rem;
+    letter-spacing: 0.08em;
+  }
+
+  footer span { color: var(--pink); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--mauve); border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">TP</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+
+  <div class="hero-left">
+    <div class="hero-tag">University of Toronto</div>
+    <h1 class="hero-name" id="heroName"></h1>
+    <p class="hero-about" id="heroAbout"></p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#experience" class="btn-outline">Experience</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="photo-frame">
+      <div class="photo-bg-shape"></div>
+      <div class="photo-placeholder">
+        <div class="photo-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+          </svg>
+        </div>
+        <span class="photo-label">Add your photo</span>
+      </div>
+      <div class="photo-deco d1"></div>
+      <div class="photo-deco d2"></div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Career</span>
+  </div>
+  <h2 class="section-title reveal">Experience</h2>
+
+  <div class="exp-timeline">
+
+    <div class="exp-item reveal">
+      <div class="exp-date">Sep 2023 — Present</div>
+      <div class="exp-role">Student</div>
+      <div class="exp-company">University of Toronto</div>
+      <p class="exp-desc">Add a short description of your studies, program, or any highlights here. What are you focusing on? What makes your academic journey unique?</p>
+      <span class="exp-tag">Add your skills</span>
+      <span class="exp-tag">Research</span>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-date">Add dates</div>
+      <div class="exp-role">Your Role Here</div>
+      <div class="exp-company">Company / Organization</div>
+      <p class="exp-desc">Describe your responsibilities, achievements, or what you learned in this role. This is your place to shine — add real bullet points or a short story about your impact.</p>
+      <span class="exp-tag">Skill 1</span>
+      <span class="exp-tag">Skill 2</span>
+      <span class="exp-tag">Skill 3</span>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-date">Add dates</div>
+      <div class="exp-role">Your Role Here</div>
+      <div class="exp-company">Company / Organization</div>
+      <p class="exp-desc">Describe what you did here — a project, internship, club, volunteer role, or part-time position. What skills did you build? What impact did you make?</p>
+      <span class="exp-tag">Skill 1</span>
+      <span class="exp-tag">Skill 2</span>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-date">Add dates</div>
+      <div class="exp-role">Your Role Here</div>
+      <div class="exp-company">Company / Organization</div>
+      <p class="exp-desc">Whether it's a leadership role, research assistantship, or freelance gig — describe your experience and what you gained from it.</p>
+      <span class="exp-tag">Skill 1</span>
+      <span class="exp-tag">Skill 2</span>
+      <span class="exp-tag">Skill 3</span>
+    </div>
+
+    <div class="exp-item reveal">
+      <div class="exp-date">Add dates</div>
+      <div class="exp-role">Your Role Here</div>
+      <div class="exp-company">Company / Organization</div>
+      <p class="exp-desc">This is a great spot for extracurriculars, hackathons, competitions, or any other experience that shaped who you are as a professional.</p>
+      <span class="exp-tag">Skill 1</span>
+      <span class="exp-tag">Skill 2</span>
+    </div>
+
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">
+    <div class="section-label-line"></div>
+    <span class="section-label-text">Work</span>
+  </div>
+  <h2 class="section-title reveal">Projects</h2>
+
+  <div class="projects-grid">
+
+    <div class="project-card reveal">
+      <div class="project-card-top">
+        <div class="project-deco-circle pc1"></div>
+        <div class="project-deco-circle pc2"></div>
+        <div class="project-card-icon">✦</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-number">Project 01</div>
+        <div class="project-name">Your First Project</div>
+        <p class="project-desc">Describe what this project is, what problem it solves, and what technologies or skills you used to build it.</p>
+        <a href="#" class="project-link">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-card-top">
+        <div class="project-deco-circle pc1"></div>
+        <div class="project-deco-circle pc2"></div>
+        <div class="project-card-icon">◈</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-number">Project 02</div>
+        <div class="project-name">Your Second Project</div>
+        <p class="project-desc">Add a brief summary of this project — its purpose, your role, and any interesting challenges you overcame.</p>
+        <a href="#" class="project-link">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-card-top">
+        <div class="project-deco-circle pc1"></div>
+        <div class="project-deco-circle pc2"></div>
+        <div class="project-card-icon">⬡</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-number">Project 03</div>
+        <div class="project-name">Your Third Project</div>
+        <p class="project-desc">This could be a research paper, app, design system, or any creation you're proud of. Tell the world about it!</p>
+        <a href="#" class="project-link">View Project →</a>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-card-top">
+        <div class="project-deco-circle pc1"></div>
+        <div class="project-deco-circle pc2"></div>
+        <div class="project-card-icon">✿</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-number">Project 04</div>
+        <div class="project-name">Your Fourth Project</div>
+        <p class="project-desc">Showcase another creation here — a collaboration, case study, or personal experiment. What makes this one special?</p>
+        <a href="#" class="project-link">View Project →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  Crafted with care by <span>Tanya Pandey</span> · University of Toronto
+</footer>
+
+<script>
+  // TYPEWRITER WITH BACKSPACE LOOP
+  const nameText = "Tanya Pandey.";
+  const aboutText = "I'm Tanya — a student at the University of Toronto with a passion for [your interests here]. I love exploring [fields you're interested in] and building things that make a difference.";
+
+  function typeChars(el, text, speed, cursorEl, onDone) {
+    let i = 0;
+    function step() {
+      if (i < text.length) {
+        el.insertBefore(document.createTextNode(text[i]), cursorEl);
+        i++;
+        setTimeout(step, speed);
+      } else {
+        if (onDone) onDone();
+      }
+    }
+    step();
+  }
+
+  function deleteChars(el, cursorEl, speed, onDone) {
+    function step() {
+      const nodes = [];
+      for (const node of el.childNodes) {
+        if (node !== cursorEl && node.nodeType === Node.TEXT_NODE && node.textContent.length > 0) {
+          nodes.push(node);
+        }
+      }
+      if (nodes.length === 0) { if (onDone) onDone(); return; }
+      const last = nodes[nodes.length - 1];
+      last.textContent = last.textContent.slice(0, -1);
+      if (last.textContent === '') last.remove();
+      setTimeout(step, speed);
+    }
+    step();
+  }
+
+  function initCursor(el) {
+    el.innerHTML = '';
+    const cursor = document.createElement('span');
+    cursor.className = 'cursor';
+    el.appendChild(cursor);
+    return cursor;
+  }
+
+  function runLoop(nameEl, aboutEl) {
+    const nameCursor = initCursor(nameEl);
+    const aboutCursor = initCursor(aboutEl);
+
+    function cycle() {
+      typeChars(nameEl, nameText, 80, nameCursor, () => {
+        setTimeout(() => {
+          typeChars(aboutEl, aboutText, 22, aboutCursor, () => {
+            setTimeout(() => {
+              deleteChars(aboutEl, aboutCursor, 14, () => {
+                deleteChars(nameEl, nameCursor, 55, () => {
+                  setTimeout(cycle, 600);
+                });
+              });
+            }, 2800);
+          });
+        }, 500);
+      });
+    }
+
+    cycle();
+  }
+
+  window.addEventListener('load', () => {
+    const nameEl = document.getElementById('heroName');
+    const aboutEl = document.getElementById('heroAbout');
+    setTimeout(() => runLoop(nameEl, aboutEl), 700);
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
