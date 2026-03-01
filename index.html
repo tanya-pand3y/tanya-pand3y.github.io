@@ -1,638 +1,510 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tanya Pandey — Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+
+  /* ═══════════════════════════════════════════
+     THEME TOKENS
+  ═══════════════════════════════════════════ */
   :root {
     --cream: #F5E6D2;
     --peach: #FCD5BA;
-    --pink: #F6A6B5;
-    --salmon: #F2B4A6;
+    --pink:  #F6A6B5;
+    --salmon:#F2B4A6;
     --mauve: #D98B9A;
-    --dark: #2a1f1f;
-    --mid: #6b4a4a;
+
+    --bg:        #f0e8dc;
+    --bg-alt:    #ecdfd0;
+    --card:      #fffaf5;
+    --text:      #2a1f1f;
+    --text-mid:  #6b4a4a;
+    --text-soft: #9a7a7a;
+    --nav-bg:    rgba(240,232,220,0.88);
+    --border:    rgba(217,139,154,0.15);
+    --shadow:    rgba(217,139,154,0.09);
+    --accent:    #D98B9A;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  [data-theme="dark"] {
+    --bg:        #18100f;
+    --bg-alt:    #201514;
+    --card:      #2b1c1b;
+    --text:      #f2e4da;
+    --text-mid:  #c8a090;
+    --text-soft: #8a6a62;
+    --nav-bg:    rgba(24,16,15,0.92);
+    --border:    rgba(217,139,154,0.13);
+    --shadow:    rgba(0,0,0,0.35);
+    --accent:    #D98B9A;
+  }
+
+  /* ── DISCO — uses palette: #951458  #e677af  #f3d5ac  #d26020 ── */
+  [data-theme="disco"] {
+    --bg:        #1a0510;
+    --bg-alt:    #22091a;
+    --card:      #2e0b1f;
+    --text:      #fde8d0;
+    --text-mid:  #e677af;
+    --text-soft: #c45a90;
+    --nav-bg:    rgba(26,5,16,0.94);
+    --border:    rgba(230,119,175,0.25);
+    --shadow:    rgba(149,20,88,0.25);
+    --accent:    #e677af;
+    --pink:      #e677af;
+    --mauve:     #951458;
+    --peach:     #f3d5ac;
+    --salmon:    #d26020;
+    --cream:     #f3d5ac;
+  }
+
+  /* ═══════════════════════════════════════════
+     BASE
+  ═══════════════════════════════════════════ */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
-    background: #faf6f2;
-    color: var(--dark);
-    overflow-x: hidden;
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    overflow-x:hidden;
+    transition:background .45s ease, color .45s ease;
   }
 
-  /* NAV */
+  /* ═══════════════════════════════════════════
+     DISCO BACKGROUND BALL + BEAMS
+  ═══════════════════════════════════════════ */
+  .disco-scene {
+    pointer-events:none;
+    position:fixed;
+    inset:0;
+    z-index:1;
+    opacity:0;
+    transition:opacity .7s;
+    overflow:hidden;
+  }
+  [data-theme="disco"] .disco-scene { opacity:1; }
+
+  /* Hanging disco ball */
+  .dball-wrap {
+    position:absolute;
+    top: -20px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .dball-string {
+    width:2px;
+    height:60px;
+    background:linear-gradient(to bottom,#aaa,#555);
+    border-radius:2px;
+  }
+  .dball {
+    width:110px;
+    height:110px;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 35% 30%, rgba(255,255,255,0.9) 0%, transparent 45%),
+      linear-gradient(135deg,#d0d0d0,#888,#d0d0d0,#666);
+    box-shadow:
+      0 0 40px rgba(230,119,175,0.5),
+      0 0 80px rgba(149,20,88,0.3),
+      inset 0 0 20px rgba(0,0,0,0.4);
+    animation:ballSpin 4s linear infinite;
+    position:relative;
+    overflow:hidden;
+  }
+
+  @keyframes ballSpin {
+    from { transform:rotate(0deg); }
+    to   { transform:rotate(360deg); }
+  }
+
+  /* Mirror tile grid on the ball */
+  .dball::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background-image:
+      repeating-linear-gradient(0deg,   transparent, transparent 10px, rgba(255,255,255,.08) 10px, rgba(255,255,255,.08) 11px),
+      repeating-linear-gradient(90deg,  transparent, transparent 10px, rgba(255,255,255,.08) 10px, rgba(255,255,255,.08) 11px);
+  }
+
+  /* Spinning colour beams from the ball */
+  .dbeam {
+    position:absolute;
+    top:110px;
+    left:50%;
+    width:4px;
+    border-radius:2px;
+    transform-origin:top center;
+    opacity:0.5;
+    filter:blur(2px);
+  }
+
+  .dbeam:nth-child(1) { height:55vh; background:linear-gradient(to bottom,#951458,transparent); transform:translateX(-50%) rotate(0deg);   animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(2) { height:60vh; background:linear-gradient(to bottom,#e677af,transparent); transform:translateX(-50%) rotate(45deg);  animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(3) { height:65vh; background:linear-gradient(to bottom,#f3d5ac,transparent); transform:translateX(-50%) rotate(90deg);  animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(4) { height:60vh; background:linear-gradient(to bottom,#d26020,transparent); transform:translateX(-50%) rotate(135deg); animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(5) { height:55vh; background:linear-gradient(to bottom,#951458,transparent); transform:translateX(-50%) rotate(180deg); animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(6) { height:60vh; background:linear-gradient(to bottom,#e677af,transparent); transform:translateX(-50%) rotate(225deg); animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(7) { height:65vh; background:linear-gradient(to bottom,#f3d5ac,transparent); transform:translateX(-50%) rotate(270deg); animation:beamSpin 4s linear infinite; }
+  .dbeam:nth-child(8) { height:60vh; background:linear-gradient(to bottom,#d26020,transparent); transform:translateX(-50%) rotate(315deg); animation:beamSpin 4s linear infinite; }
+
+  @keyframes beamSpin {
+    from { transform:translateX(-50%) rotate(var(--start-angle,0deg)); }
+    to   { transform:translateX(-50%) rotate(calc(var(--start-angle,0deg) + 360deg)); }
+  }
+
+  /* Override with custom property per beam */
+  .dbeam:nth-child(1) { --start-angle:0deg; }
+  .dbeam:nth-child(2) { --start-angle:45deg; }
+  .dbeam:nth-child(3) { --start-angle:90deg; }
+  .dbeam:nth-child(4) { --start-angle:135deg; }
+  .dbeam:nth-child(5) { --start-angle:180deg; }
+  .dbeam:nth-child(6) { --start-angle:225deg; }
+  .dbeam:nth-child(7) { --start-angle:270deg; }
+  .dbeam:nth-child(8) { --start-angle:315deg; }
+
+  /* Spotlight circles on the floor */
+  .dspot {
+    position:absolute;
+    border-radius:50%;
+    filter:blur(40px);
+    opacity:0.18;
+  }
+  .dspot:nth-child(9)  { width:300px; height:200px; background:#951458; bottom:10%; left:5%;  animation:spotDrift 5s ease-in-out infinite; }
+  .dspot:nth-child(10) { width:250px; height:180px; background:#e677af; bottom:15%; right:8%; animation:spotDrift 7s ease-in-out infinite reverse; }
+  .dspot:nth-child(11) { width:200px; height:150px; background:#d26020; bottom:5%;  left:40%; animation:spotDrift 6s ease-in-out infinite 2s; }
+
+  @keyframes spotDrift {
+    0%,100% { transform:translate(0,0) scale(1); }
+    33%     { transform:translate(60px,-30px) scale(1.3); }
+    66%     { transform:translate(-40px,20px) scale(.8); }
+  }
+
+  /* floor sparkles */
+  [data-theme="disco"] body::before {
+    content:'';
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:
+      radial-gradient(1.5px 1.5px at  7% 70%, #f3d5ac 0,transparent 100%),
+      radial-gradient(1px   1px   at 20% 85%, #e677af 0,transparent 100%),
+      radial-gradient(2px   2px   at 45% 60%, #fff 0,transparent 100%),
+      radial-gradient(1px   1px   at 68% 75%, #951458 0,transparent 100%),
+      radial-gradient(1.5px 1.5px at 85% 65%, #f3d5ac 0,transparent 100%),
+      radial-gradient(1px   1px   at 30% 90%, #e677af 0,transparent 100%),
+      radial-gradient(1.8px 1.8px at 60% 80%, #fff 0,transparent 100%),
+      radial-gradient(1px   1px   at 90% 88%, #d26020 0,transparent 100%);
+    animation:sparkle 2.5s ease-in-out infinite alternate;
+  }
+  @keyframes sparkle { from{opacity:.2} to{opacity:.9} }
+
+  /* Disco overrides for sections */
+  [data-theme="disco"] .hero-bg-circle.c1 { background:radial-gradient(circle,rgba(230,119,175,.45),transparent)!important; }
+  [data-theme="disco"] .hero-bg-circle.c2 { background:radial-gradient(circle,rgba(210,96,32,.35),transparent)!important; }
+  [data-theme="disco"] .cursor            { background:#e677af; }
+  [data-theme="disco"] .exp-item:hover    { box-shadow:0 8px 40px rgba(149,20,88,.3); border-color:rgba(230,119,175,.45); }
+  [data-theme="disco"] .interest-card:hover { box-shadow:0 16px 40px rgba(149,20,88,.3); }
+  [data-theme="disco"] .project-card:hover  { box-shadow:0 20px 50px rgba(149,20,88,.3); }
+  [data-theme="disco"] .project-card:nth-child(1) .project-card-top { background:linear-gradient(135deg,#2e0b1f,#951458); }
+  [data-theme="disco"] .project-card:nth-child(2) .project-card-top { background:linear-gradient(135deg,#951458,#e677af); }
+  [data-theme="disco"] .project-card:nth-child(3) .project-card-top { background:linear-gradient(135deg,#d26020,#f3d5ac); }
+  [data-theme="disco"] .btn-primary  { background:linear-gradient(135deg,#951458,#e677af); box-shadow:0 4px 20px rgba(149,20,88,.45); }
+  [data-theme="disco"] .btn-outline  { color:#e677af; border-color:#e677af; }
+  [data-theme="disco"] .btn-outline:hover { background:#e677af; color:#fff; }
+  [data-theme="disco"] .section-divider { background:linear-gradient(to right,transparent,#951458,#e677af,#951458,transparent); }
+  [data-theme="disco"] .exp-tag { background:rgba(149,20,88,.15); border-color:rgba(230,119,175,.3); }
+  [data-theme="disco"] #contact { background:#120308; }
+  [data-theme="disco"] .terminal-window { animation:tGlowDisco 2s ease-in-out infinite alternate; }
+
+  @keyframes tGlowDisco {
+    from { box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 50px rgba(149,20,88,.35); }
+    to   { box-shadow:0 30px 80px rgba(0,0,0,.7),0 0 90px rgba(230,119,175,.45); }
+  }
+
+  /* ── DARK OVERRIDES ── */
+  [data-theme="dark"] .exp-item::before { border-color:var(--card); }
+  [data-theme="dark"] .hero-tag { background:rgba(217,139,154,.15); border-color:rgba(217,139,154,.25); }
+
+  /* ═══════════════════════════════════════════
+     THEME SWITCHER — always visible grey bg
+  ═══════════════════════════════════════════ */
+  .theme-switcher {
+    position:fixed;
+    right:1.1rem;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:300;
+    display:flex;
+    flex-direction:column;
+    gap:.55rem;
+  }
+
+  .tbtn {
+    width:46px; height:46px;
+    border-radius:50%;
+    border:2.5px solid transparent;
+    background:#e0e0e0;          /* always light grey so visible on any bg */
+    box-shadow:0 3px 14px rgba(0,0,0,.22);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .2s, box-shadow .2s, border-color .3s;
+    padding:0;
+  }
+  .tbtn:hover { transform:scale(1.18); box-shadow:0 6px 22px rgba(0,0,0,.3); }
+  .tbtn.active { border-color:#951458; box-shadow:0 3px 14px rgba(149,20,88,.45); }
+
+  .tbtn svg { display:block; }
+
+  /* ═══════════════════════════════════════════
+     NAV
+  ═══════════════════════════════════════════ */
   nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem 5vw;
-    background: rgba(250,246,242,0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(217,139,154,0.15);
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:1.2rem 5vw;
+    background:var(--nav-bg);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--border);
+    transition:background .45s, border-color .45s;
   }
+  .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-weight:600; color:var(--accent); letter-spacing:.02em; transition:color .45s; }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; }
+  .nav-links a { text-decoration:none; font-size:.82rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--text-mid); transition:color .3s; }
+  .nav-links a:hover { color:var(--accent); }
 
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    font-weight: 600;
-    color: var(--mauve);
-    letter-spacing: 0.02em;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    text-decoration: none;
-    font-size: 0.82rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--mid);
-    transition: color 0.3s;
-  }
-
-  .nav-links a:hover { color: var(--mauve); }
-
-  /* HERO */
+  /* ═══════════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════════ */
   #hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 0 8vw;
-    gap: 4rem;
-    position: relative;
-    overflow: hidden;
+    min-height:100vh;
+    display:grid; grid-template-columns:1fr 1fr;
+    align-items:center; padding:0 8vw; gap:4rem;
+    position:relative; overflow:hidden;
   }
-
-  .hero-bg-circle {
-    position: absolute;
-    border-radius: 50%;
-    opacity: 0.18;
-    pointer-events: none;
-  }
-  .hero-bg-circle.c1 {
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--pink), transparent);
-    top: -100px; right: -100px;
-    animation: float 8s ease-in-out infinite;
-  }
-  .hero-bg-circle.c2 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, var(--peach), transparent);
-    bottom: -80px; left: -80px;
-    animation: float 10s ease-in-out infinite reverse;
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-20px) scale(1.03); }
-  }
-
-  .hero-left { position: relative; z-index: 2; }
-
-  .hero-tag {
-    display: inline-block;
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    background: rgba(217,139,154,0.12);
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
-    margin-bottom: 1.8rem;
-    border: 1px solid rgba(217,139,154,0.3);
-    opacity: 0;
-    animation: fadeUp 0.6s 0.3s forwards;
-  }
-
-  .hero-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(3.5rem, 6vw, 5.5rem);
-    font-weight: 700;
-    line-height: 1.05;
-    color: var(--dark);
-    margin-bottom: 1.5rem;
-    min-height: 2.2em;
-  }
-
-  .cursor {
-    display: inline-block;
-    width: 3px;
-    height: 0.85em;
-    background: var(--mauve);
-    vertical-align: middle;
-    margin-left: 4px;
-    animation: blink 0.8s step-end infinite;
-  }
-
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-  }
-
-  .hero-about {
-    font-size: 1.05rem;
-    line-height: 1.85;
-    color: var(--mid);
-    max-width: 480px;
-    min-height: 5em;
-    margin-bottom: 2.5rem;
-    font-weight: 300;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    opacity: 0;
-    animation: fadeUp 0.6s 3.5s forwards;
-  }
-
-  .btn-primary {
-    padding: 0.85rem 2.2rem;
-    background: linear-gradient(135deg, var(--mauve), var(--pink));
-    color: white;
-    border: none;
-    border-radius: 50px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s;
-    box-shadow: 0 4px 20px rgba(217,139,154,0.35);
-  }
-
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(217,139,154,0.45);
-  }
-
-  .btn-outline {
-    padding: 0.85rem 2.2rem;
-    background: transparent;
-    color: var(--mauve);
-    border: 1.5px solid var(--mauve);
-    border-radius: 50px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s;
-  }
-
-  .btn-outline:hover {
-    background: var(--mauve);
-    color: white;
-    transform: translateY(-2px);
-  }
-
-  /* HERO TERMINAL */
-  .hero-right {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    animation: fadeIn 1s 0.4s forwards;
-  }
-
-  .hero-terminal-wrap {
-    width: 100%;
-    max-width: 460px;
-  }
-
-  /* DIVIDER */
-  .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--peach), var(--pink), var(--peach), transparent);
-    margin: 0;
-  }
-
-  /* SECTIONS */
-  section { padding: 7rem 8vw; }
-
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 3.5rem;
-  }
-
-  .section-label-line {
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(to right, var(--mauve), var(--pink));
-    border-radius: 2px;
-  }
-
-  .section-label-text {
-    font-size: 0.72rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    font-weight: 500;
-  }
-
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 3.5rem;
-    line-height: 1.1;
-  }
-
-  /* EXPERIENCE */
-  #experience { background: #faf6f2; }
-
-  .exp-timeline {
-    position: relative;
-    padding-left: 2rem;
-  }
-
-  .exp-timeline::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 8px;
-    bottom: 8px;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--pink), var(--mauve));
-    border-radius: 2px;
-  }
-
-  .exp-item {
-    position: relative;
-    padding: 2rem 2rem 2.5rem 3rem;
-    margin-bottom: 1.5rem;
-    background: white;
-    border-radius: 20px;
-    border: 1px solid rgba(217,139,154,0.1);
-    box-shadow: 0 4px 24px rgba(217,139,154,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: default;
-  }
-
-  .exp-item:hover {
-    transform: translateX(6px);
-    box-shadow: 0 8px 40px rgba(217,139,154,0.18);
-    border-color: rgba(217,139,154,0.25);
-  }
-
-  .exp-item::before {
-    content: '';
-    position: absolute;
-    left: -2.65rem;
-    top: 2.2rem;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--mauve), var(--pink));
-    border: 3px solid white;
-    box-shadow: 0 0 0 2px var(--mauve);
-  }
-
-  .exp-date {
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-  }
-
-  .exp-role {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.3rem;
-  }
-
-  .exp-company {
-    font-size: 0.9rem;
-    color: var(--mid);
-    font-weight: 500;
-    margin-bottom: 1rem;
-  }
-
-  .exp-desc {
-    font-size: 0.9rem;
-    line-height: 1.75;
-    color: #8a6a6a;
-    font-weight: 300;
-  }
-
-  .exp-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    padding: 0.25rem 0.8rem;
-    border-radius: 20px;
-    background: rgba(242,180,166,0.15);
-    color: var(--mauve);
-    border: 1px solid rgba(217,139,154,0.2);
-    margin: 0.8rem 0.3rem 0 0;
-    letter-spacing: 0.06em;
-  }
-
-  /* INTERESTS */
-  #interests { background: white; }
-
-  .interests-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .interest-card {
-    background: #faf6f2;
-    border-radius: 20px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    border: 1px solid rgba(217,139,154,0.12);
-    box-shadow: 0 4px 20px rgba(217,139,154,0.07);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
-    cursor: default;
-  }
-
-  .interest-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 16px 40px rgba(217,139,154,0.18);
-  }
-
-  .interest-emoji {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    display: block;
-    filter: drop-shadow(0 2px 8px rgba(217,139,154,0.3));
-  }
-
-  .interest-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.4rem;
-  }
-
-  .interest-desc {
-    font-size: 0.8rem;
-    color: #8a6a6a;
-    font-weight: 300;
-    line-height: 1.5;
-  }
-
-  /* PROJECTS */
-  #projects { background: #faf6f2; }
-
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-  }
-
-  .project-card {
-    border-radius: 24px;
-    overflow: hidden;
-    position: relative;
-    cursor: default;
-    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.35s;
-    border: 1px solid rgba(217,139,154,0.12);
-    box-shadow: 0 4px 24px rgba(217,139,154,0.08);
-  }
-
-  .project-card:hover {
-    transform: translateY(-10px) scale(1.01);
-    box-shadow: 0 20px 50px rgba(217,139,154,0.22);
-  }
-
-  .project-card-top {
-    height: 180px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .project-card:nth-child(1) .project-card-top { background: linear-gradient(135deg, var(--cream), var(--peach)); }
-  .project-card:nth-child(2) .project-card-top { background: linear-gradient(135deg, var(--peach), var(--pink)); }
-  .project-card:nth-child(3) .project-card-top { background: linear-gradient(135deg, var(--pink), var(--mauve)); }
-  .project-card:nth-child(4) .project-card-top { background: linear-gradient(135deg, var(--salmon), var(--peach)); }
-
-  .project-card-icon {
-    font-size: 3rem;
-    opacity: 0.6;
-    filter: grayscale(0.3);
-  }
-
-  .project-deco-circle {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-  }
-  .project-deco-circle.pc1 { width: 120px; height: 120px; top: -30px; right: -30px; }
-  .project-deco-circle.pc2 { width: 70px; height: 70px; bottom: -15px; left: 20px; }
-
-  .project-card-body {
-    background: white;
-    padding: 1.8rem;
-  }
-
-  .project-number {
-    font-size: 0.68rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    opacity: 0.7;
-  }
-
-  .project-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: var(--dark);
-    margin-bottom: 0.7rem;
-    line-height: 1.2;
-  }
-
-  .project-desc {
-    font-size: 0.87rem;
-    line-height: 1.7;
-    color: #8a6a6a;
-    font-weight: 300;
-    margin-bottom: 1.2rem;
-  }
-
-  .project-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.78rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--mauve);
-    font-weight: 500;
-    text-decoration: none;
-    border-bottom: 1px solid transparent;
-    transition: border-color 0.2s, gap 0.2s;
-  }
-
-  .project-link:hover { border-bottom-color: var(--mauve); gap: 0.7rem; }
-
-  /* CONTACT — MAC TERMINAL */
-  #contact {
-    background: var(--dark);
-    padding: 7rem 8vw;
-  }
-
-  #contact .section-label-text { color: var(--pink); }
-  #contact .section-label-line { background: linear-gradient(to right, var(--pink), var(--mauve)); }
-  #contact .section-title { color: rgba(255,255,255,0.9); margin-bottom: 3rem; }
-
-  /* TERMINAL (hero) */
-
-  .terminal-window {
-    max-width: 700px;
-    margin: 0 auto;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
-    animation: terminalGlow 4s ease-in-out infinite alternate;
-  }
-
-  @keyframes terminalGlow {
-    from { box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(217,139,154,0.05); }
-    to   { box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 60px rgba(217,139,154,0.12); }
-  }
-
-  /* Title bar */
-  .terminal-titlebar {
-    background: #3c3c3c;
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  .terminal-dot {
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-  }
-  .terminal-dot.red    { background: #ff5f57; }
-  .terminal-dot.yellow { background: #febc2e; }
-  .terminal-dot.green  { background: #28c840; }
-
-  .terminal-title {
-    flex: 1;
-    text-align: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 0.05em;
-    margin-left: -3.5rem;
-  }
-
-  /* Body */
-  .terminal-body {
-    background: #1e1e1e;
-    padding: 2rem 2rem 2.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.9rem;
-    line-height: 2;
-    min-height: 240px;
-  }
-
-  .terminal-line {
-    display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
-    margin-bottom: 0.2rem;
-    opacity: 0;
-  }
-
-  .terminal-line.show { opacity: 1; }
-
-  .t-prompt { color: var(--pink); font-weight: 500; white-space: nowrap; }
-  .t-cmd    { color: #c8d3f5; }
-  .t-output { color: rgba(255,255,255,0.75); padding-left: 0; }
-  .t-name   { color: var(--peach); font-weight: 500; }
-  .t-email  { color: #7ec8e3; text-decoration: none; transition: color 0.2s; }
-  .t-email:hover { color: var(--pink); }
-  .t-blank  { height: 0.6rem; }
-
-  .terminal-cursor {
-    display: inline-block;
-    width: 9px;
-    height: 1.1em;
-    background: rgba(255,255,255,0.7);
-    vertical-align: middle;
-    margin-left: 2px;
-    animation: blink 1s step-end infinite;
-  }
-
-  /* FOOTER */
-  footer {
-    text-align: center;
-    padding: 3.5rem;
-    background: #1a1212;
-    color: rgba(255,255,255,0.25);
-    font-size: 0.82rem;
-    letter-spacing: 0.08em;
-  }
-
-  footer span { color: var(--pink); }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--cream); }
-  ::-webkit-scrollbar-thumb { background: var(--mauve); border-radius: 10px; }
+  .hero-bg-circle { position:absolute; border-radius:50%; opacity:.18; pointer-events:none; transition:background .45s; }
+  .hero-bg-circle.c1 { width:600px; height:600px; background:radial-gradient(circle,var(--pink),transparent); top:-100px; right:-100px; animation:floatC 8s ease-in-out infinite; }
+  .hero-bg-circle.c2 { width:400px; height:400px; background:radial-gradient(circle,var(--peach),transparent); bottom:-80px; left:-80px; animation:floatC 10s ease-in-out infinite reverse; }
+  @keyframes floatC { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.03)} }
+
+  .hero-left { position:relative; z-index:2; }
+
+  .hero-tag { display:inline-block; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); background:rgba(217,139,154,.12); padding:.4rem 1rem; border-radius:20px; margin-bottom:1.8rem; border:1px solid rgba(217,139,154,.3); opacity:0; animation:fadeUp .6s .3s forwards; transition:color .45s; }
+  [data-theme="disco"] .hero-tag { background:rgba(149,20,88,.15); border-color:rgba(230,119,175,.35); }
+
+  .hero-name { font-family:'Cormorant Garamond',serif; font-size:clamp(3.5rem,6vw,5.5rem); font-weight:700; line-height:1.05; color:var(--text); margin-bottom:1.5rem; min-height:2.2em; transition:color .45s; }
+  .cursor { display:inline-block; width:3px; height:.85em; background:var(--accent); vertical-align:middle; margin-left:4px; animation:blink .8s step-end infinite; transition:background .45s; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  .hero-about { font-size:1.05rem; line-height:1.85; color:var(--text-mid); max-width:480px; min-height:5em; margin-bottom:2.5rem; font-weight:300; transition:color .45s; }
+
+  .hero-cta { display:flex; gap:1rem; opacity:0; animation:fadeUp .6s 3.5s forwards; }
+
+  .btn-primary { padding:.85rem 2.2rem; background:linear-gradient(135deg,var(--mauve),var(--pink)); color:#fff; border:none; border-radius:50px; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:500; letter-spacing:.05em; cursor:pointer; text-decoration:none; transition:transform .2s, box-shadow .2s, background .45s; box-shadow:0 4px 20px rgba(217,139,154,.35); }
+  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(217,139,154,.45); }
+
+  .btn-outline { padding:.85rem 2.2rem; background:transparent; color:var(--accent); border:1.5px solid var(--accent); border-radius:50px; font-family:'DM Sans',sans-serif; font-size:.85rem; font-weight:500; letter-spacing:.05em; cursor:pointer; text-decoration:none; transition:all .2s; }
+  .btn-outline:hover { background:var(--accent); color:#fff; transform:translateY(-2px); }
+
+  .hero-right { position:relative; z-index:2; display:flex; justify-content:center; align-items:center; opacity:0; animation:fadeIn 1s .4s forwards; }
+
+  /* ═══════════════════════════════════════════
+     DIVIDERS & SECTIONS
+  ═══════════════════════════════════════════ */
+  .section-divider { width:100%; height:1px; margin:0; background:linear-gradient(to right,transparent,var(--peach),var(--pink),var(--peach),transparent); transition:background .45s; }
+  [data-theme="disco"] .section-divider { background:linear-gradient(to right,transparent,#951458,#e677af,#951458,transparent); }
+
+  section { padding:7rem 8vw; transition:background .45s; }
+
+  .section-label { display:flex; align-items:center; gap:1rem; margin-bottom:3.5rem; }
+  .section-label-line { width:40px; height:2px; border-radius:2px; background:linear-gradient(to right,var(--mauve),var(--pink)); transition:background .45s; }
+  .section-label-text { font-size:.72rem; letter-spacing:.25em; text-transform:uppercase; color:var(--accent); font-weight:500; transition:color .45s; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.2rem,4vw,3.2rem); font-weight:700; color:var(--text); margin-bottom:3.5rem; line-height:1.1; transition:color .45s; }
+
+  /* ═══════════════════════════════════════════
+     EXPERIENCE
+  ═══════════════════════════════════════════ */
+  #experience { background:var(--bg); }
+  .exp-timeline { position:relative; padding-left:2rem; }
+  .exp-timeline::before { content:''; position:absolute; left:0; top:8px; bottom:8px; width:2px; background:linear-gradient(to bottom,var(--pink),var(--mauve)); border-radius:2px; transition:background .45s; }
+
+  .exp-item { position:relative; padding:2rem 2rem 2.5rem 3rem; margin-bottom:1.5rem; background:var(--card); border-radius:20px; border:1px solid var(--border); box-shadow:0 4px 24px var(--shadow); transition:transform .3s, box-shadow .3s, background .45s, border-color .45s; cursor:default; }
+  .exp-item:hover { transform:translateX(6px); box-shadow:0 8px 40px rgba(217,139,154,.18); border-color:rgba(217,139,154,.28); }
+  .exp-item::before { content:''; position:absolute; left:-2.65rem; top:2.2rem; width:14px; height:14px; border-radius:50%; background:linear-gradient(135deg,var(--mauve),var(--pink)); border:3px solid var(--card); box-shadow:0 0 0 2px var(--accent); transition:background .45s, border-color .45s, box-shadow .45s; }
+
+  .exp-date    { font-size:.72rem; letter-spacing:.15em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:.5rem; transition:color .45s; }
+  .exp-role    { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:700; color:var(--text); margin-bottom:.3rem; transition:color .45s; }
+  .exp-company { font-size:.9rem; color:var(--text-mid); font-weight:500; margin-bottom:1rem; transition:color .45s; }
+  .exp-desc    { font-size:.9rem; line-height:1.75; color:var(--text-soft); font-weight:300; transition:color .45s; }
+  .exp-tag     { display:inline-block; font-size:.7rem; padding:.25rem .8rem; border-radius:20px; background:rgba(242,180,166,.15); color:var(--accent); border:1px solid rgba(217,139,154,.2); margin:.8rem .3rem 0 0; letter-spacing:.06em; transition:color .45s, background .45s, border-color .45s; }
+
+  /* ═══════════════════════════════════════════
+     INTERESTS
+  ═══════════════════════════════════════════ */
+  #interests { background:var(--bg-alt); }
+  .interests-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.5rem; }
+  .interest-card { background:var(--card); border-radius:20px; padding:2rem 1.5rem; text-align:center; border:1px solid var(--border); box-shadow:0 4px 20px var(--shadow); transition:transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .3s, background .45s; cursor:default; }
+  .interest-card:hover { transform:translateY(-8px) scale(1.02); box-shadow:0 16px 40px rgba(217,139,154,.18); }
+  .interest-emoji { font-size:2.5rem; margin-bottom:1rem; display:block; filter:drop-shadow(0 2px 8px rgba(217,139,154,.3)); }
+  .interest-name  { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:700; color:var(--text); margin-bottom:.4rem; transition:color .45s; }
+  .interest-desc  { font-size:.8rem; color:var(--text-soft); font-weight:300; line-height:1.5; transition:color .45s; }
+
+  /* ═══════════════════════════════════════════
+     PROJECTS
+  ═══════════════════════════════════════════ */
+  #projects { background:var(--bg); }
+  .projects-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:2rem; }
+  .project-card { border-radius:24px; overflow:hidden; cursor:default; transition:transform .35s cubic-bezier(.34,1.56,.64,1), box-shadow .35s; border:1px solid var(--border); box-shadow:0 4px 24px var(--shadow); }
+  .project-card:hover { transform:translateY(-10px) scale(1.01); box-shadow:0 20px 50px rgba(217,139,154,.22); }
+  .project-card-top { height:180px; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; transition:background .45s; }
+  .project-card:nth-child(1) .project-card-top { background:linear-gradient(135deg,var(--cream),var(--peach)); }
+  .project-card:nth-child(2) .project-card-top { background:linear-gradient(135deg,var(--peach),var(--pink)); }
+  .project-card:nth-child(3) .project-card-top { background:linear-gradient(135deg,var(--pink),var(--mauve)); }
+  .project-card-icon { font-size:3rem; opacity:.6; filter:grayscale(.3); }
+  .project-deco-circle { position:absolute; border-radius:50%; background:rgba(255,255,255,.25); }
+  .project-deco-circle.pc1 { width:120px; height:120px; top:-30px; right:-30px; }
+  .project-deco-circle.pc2 { width:70px; height:70px; bottom:-15px; left:20px; }
+  .project-card-body { background:var(--card); padding:1.8rem; transition:background .45s; }
+  .project-number { font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; color:var(--accent); font-weight:500; margin-bottom:.5rem; opacity:.7; }
+  .project-name   { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:700; color:var(--text); margin-bottom:.7rem; line-height:1.2; transition:color .45s; }
+  .project-desc   { font-size:.87rem; line-height:1.7; color:var(--text-soft); font-weight:300; margin-bottom:1.2rem; transition:color .45s; }
+  .project-link   { display:inline-flex; align-items:center; gap:.4rem; font-size:.78rem; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); font-weight:500; text-decoration:none; border-bottom:1px solid transparent; transition:border-color .2s, gap .2s, color .45s; }
+  .project-link:hover { border-bottom-color:var(--accent); gap:.7rem; }
+
+  /* ═══════════════════════════════════════════
+     CONTACT / TERMINAL
+  ═══════════════════════════════════════════ */
+  #contact { background:#1a1212; padding:7rem 8vw; transition:background .45s; }
+  [data-theme="disco"] #contact { background:#120308; }
+
+  #contact .section-label-text { color:var(--pink); transition:color .45s; }
+  #contact .section-label-line  { background:linear-gradient(to right,var(--pink),var(--mauve)); }
+  #contact .section-title { color:rgba(255,255,255,.9); margin-bottom:3rem; }
+
+  .terminal-window { max-width:700px; margin:0 auto; border-radius:14px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06); animation:tGlow 4s ease-in-out infinite alternate; }
+  @keyframes tGlow { from{box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 40px rgba(217,139,154,.05)} to{box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 60px rgba(217,139,154,.14)} }
+
+  .terminal-titlebar { background:#3c3c3c; padding:.75rem 1rem; display:flex; align-items:center; gap:.5rem; }
+  .terminal-dot { width:13px; height:13px; border-radius:50%; }
+  .terminal-dot.red { background:#ff5f57; }
+  .terminal-dot.yellow { background:#febc2e; }
+  .terminal-dot.green  { background:#28c840; }
+  .terminal-title { flex:1; text-align:center; font-family:'JetBrains Mono',monospace; font-size:.75rem; color:rgba(255,255,255,.45); letter-spacing:.05em; margin-left:-3.5rem; }
+  .terminal-body { background:#1e1e1e; padding:2rem 2rem 2.5rem; font-family:'JetBrains Mono',monospace; font-size:.9rem; line-height:2; min-height:240px; }
+  .terminal-line { display:flex; align-items:baseline; gap:.5rem; margin-bottom:.2rem; opacity:0; transition:opacity .3s; }
+  .terminal-line.show { opacity:1; }
+  .t-prompt { color:#F6A6B5; font-weight:500; white-space:nowrap; }
+  .t-cmd    { color:#c8d3f5; }
+  .t-output { color:rgba(255,255,255,.75); }
+  .t-name   { color:#FCD5BA; font-weight:500; }
+  .t-email  { color:#7ec8e3; text-decoration:none; transition:color .2s; }
+  .t-email:hover { color:#F6A6B5; }
+  .t-blank  { height:.6rem; }
+  .terminal-cursor { display:inline-block; width:9px; height:1.1em; background:rgba(255,255,255,.7); vertical-align:middle; margin-left:2px; animation:blink 1s step-end infinite; }
+
+  /* ═══════════════════════════════════════════
+     FOOTER
+  ═══════════════════════════════════════════ */
+  footer { text-align:center; padding:3.5rem; background:#1a1212; color:rgba(255,255,255,.25); font-size:.82rem; letter-spacing:.08em; transition:background .45s; }
+  [data-theme="disco"] footer { background:#120308; }
+  footer span { color:#F6A6B5; }
+
+  /* ═══════════════════════════════════════════
+     ANIMATIONS
+  ═══════════════════════════════════════════ */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--accent); border-radius:10px; }
 </style>
 </head>
 <body>
+
+<!-- Disco scene: ball + beams + spotlights -->
+<div class="disco-scene">
+  <div class="dball-wrap">
+    <div class="dball-string"></div>
+    <div class="dball"></div>
+  </div>
+  <!-- 8 spinning beams -->
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <div class="dbeam"></div>
+  <!-- floor spotlights -->
+  <div class="dspot"></div>
+  <div class="dspot"></div>
+  <div class="dspot"></div>
+</div>
+
+<!-- Theme switcher — fixed right -->
+<div class="theme-switcher">
+
+  <!-- SUN — light -->
+  <button class="tbtn active" id="btnLight" onclick="setTheme('light')" title="Light mode">
+    <svg width="26" height="26" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="7" fill="#FFD12A"/>
+      <line x1="16" y1="2"  x2="16" y2="6"  stroke="#FFD12A" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="16" y1="26" x2="16" y2="30" stroke="#FFD12A" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="2"  y1="16" x2="6"  y2="16" stroke="#FFD12A" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="26" y1="16" x2="30" y2="16" stroke="#FFD12A" stroke-width="2.4" stroke-linecap="round"/>
+      <line x1="5.5"  y1="5.5"  x2="8.3"  y2="8.3"  stroke="#FFD12A" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="23.7" y1="23.7" x2="26.5" y2="26.5" stroke="#FFD12A" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="26.5" y1="5.5"  x2="23.7" y2="8.3"  stroke="#FFD12A" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="8.3"  y1="23.7" x2="5.5"  y2="26.5" stroke="#FFD12A" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+  </button>
+
+  <!-- MOON — dark -->
+  <button class="tbtn" id="btnDark" onclick="setTheme('dark')" title="Dark mode">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none">
+      <path d="M22 14.5A10 10 0 1 1 10.5 5 7.5 7.5 0 0 0 22 14.5Z" fill="white"/>
+    </svg>
+  </button>
+
+  <!-- DISCO BALL -->
+  <button class="tbtn" id="btnDisco" onclick="setTheme('disco')" title="Disco mode">
+    <svg width="28" height="30" viewBox="0 0 32 38" fill="none">
+      <line x1="16" y1="0" x2="16" y2="7" stroke="#aaa" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="16" cy="1.2" r="1.3" fill="#aaa"/>
+      <circle cx="16" cy="22" r="12" fill="#c4c4c4"/>
+      <rect x="9.5"  y="12"   width="4" height="2.8" rx=".5" fill="white"    opacity=".95"/>
+      <rect x="14.5" y="11.5" width="4" height="2.8" rx=".5" fill="#ffe0f0"  opacity=".92"/>
+      <rect x="19.5" y="12"   width="4" height="2.8" rx=".5" fill="white"    opacity=".95"/>
+      <rect x="7.5"  y="16.5" width="4" height="2.8" rx=".5" fill="#f3d5ac"  opacity=".9"/>
+      <rect x="12.5" y="16"   width="4" height="2.8" rx=".5" fill="white"    opacity=".95"/>
+      <rect x="17.5" y="16"   width="4" height="2.8" rx=".5" fill="#e677af"  opacity=".92"/>
+      <rect x="22.5" y="16.5" width="4" height="2.8" rx=".5" fill="white"    opacity=".9"/>
+      <rect x="8"    y="21"   width="4" height="2.8" rx=".5" fill="white"    opacity=".88"/>
+      <rect x="13"   y="20.5" width="4" height="2.8" rx=".5" fill="#f3d5ac"  opacity=".92"/>
+      <rect x="18"   y="20.5" width="4" height="2.8" rx=".5" fill="white"    opacity=".92"/>
+      <rect x="23"   y="21"   width="4" height="2.8" rx=".5" fill="#951458"  opacity=".88"/>
+      <ellipse cx="13.5" cy="16.5" rx="2.8" ry="2" fill="white" opacity=".6"/>
+      <line x1="4"  y1="15" x2="0"  y2="10" stroke="#951458" stroke-width="1.5" stroke-linecap="round" opacity=".85"/>
+      <line x1="28" y1="15" x2="32" y2="10" stroke="#e677af" stroke-width="1.5" stroke-linecap="round" opacity=".85"/>
+      <line x1="4"  y1="25" x2="0"  y2="30" stroke="#d26020" stroke-width="1.5" stroke-linecap="round" opacity=".85"/>
+      <line x1="28" y1="25" x2="32" y2="30" stroke="#f3d5ac" stroke-width="1.5" stroke-linecap="round" opacity=".85"/>
+    </svg>
+  </button>
+
+</div>
 
 <!-- NAV -->
 <nav>
@@ -650,41 +522,32 @@
 <section id="hero">
   <div class="hero-bg-circle c1"></div>
   <div class="hero-bg-circle c2"></div>
-
   <div class="hero-left">
     <div class="hero-tag">University of Toronto</div>
     <h1 class="hero-name" id="heroName"></h1>
-    <p class="hero-about" id="heroAbout"></p>
+    <p class="hero-about"  id="heroAbout"></p>
     <div class="hero-cta">
-      <a href="#projects" class="btn-primary">View My Work</a>
+      <a href="#projects"   class="btn-primary">View My Work</a>
       <a href="#experience" class="btn-outline">Experience</a>
     </div>
   </div>
-
-  <div class="hero-right">
-  </div>
+  <div class="hero-right"></div>
 </section>
 
 <div class="section-divider"></div>
 
 <!-- EXPERIENCE -->
 <section id="experience">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span class="section-label-text">Career</span>
-  </div>
+  <div class="section-label"><div class="section-label-line"></div><span class="section-label-text">Career</span></div>
   <h2 class="section-title reveal">Experience</h2>
-
   <div class="exp-timeline">
 
     <div class="exp-item reveal">
       <div class="exp-date">January 2026 — April 2026</div>
       <div class="exp-role">Global Markets Analyst</div>
       <div class="exp-company">BMO Capital Markets</div>
-      <p class="exp-desc">Investment Grade Credit Sales, Trading & Strategy</p>
-      <span class="exp-tag">Excel</span>
-      <span class="exp-tag">VBA</span>
-      <span class="exp-tag">Powerpoint</span>
+      <p class="exp-desc">Investment Grade Credit Sales, Trading &amp; Strategy</p>
+      <span class="exp-tag">Excel</span><span class="exp-tag">VBA</span><span class="exp-tag">Powerpoint</span>
     </div>
 
     <div class="exp-item reveal">
@@ -692,9 +555,7 @@
       <div class="exp-role">Software Engineering Intern</div>
       <div class="exp-company">ChargeLab</div>
       <p class="exp-desc">Hardware and Software Engineering.</p>
-      <span class="exp-tag">Python</span>
-      <span class="exp-tag">Java</span>
-      <span class="exp-tag">C</span>
+      <span class="exp-tag">Python</span><span class="exp-tag">Java</span><span class="exp-tag">C</span>
     </div>
 
     <div class="exp-item reveal">
@@ -702,8 +563,7 @@
       <div class="exp-role">Machine Learning Research Assistant</div>
       <div class="exp-company">University of Toronto</div>
       <p class="exp-desc">Reinforcement Learning and the multi-armed bandit algorithm.</p>
-      <span class="exp-tag">R</span>
-      <span class="exp-tag">Bayesian Statistics</span>
+      <span class="exp-tag">R</span><span class="exp-tag">Bayesian Statistics</span>
     </div>
 
   </div>
@@ -713,38 +573,13 @@
 
 <!-- INTERESTS -->
 <section id="interests">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span class="section-label-text">Passions</span>
-  </div>
+  <div class="section-label"><div class="section-label-line"></div><span class="section-label-text">Passions</span></div>
   <h2 class="section-title reveal">Interests</h2>
-
   <div class="interests-grid">
-
-    <div class="interest-card reveal">
-      <span class="interest-emoji">📈</span>
-      <div class="interest-name">Financial Markets</div>
-      <p class="interest-desc">Equity research, credit markets, and the art of finding signal in noise.</p>
-    </div>
-
-    <div class="interest-card reveal">
-      <span class="interest-emoji">💻</span>
-      <div class="interest-name">Coding</div>
-      <p class="interest-desc">Building tools that solve real problems — from ML models to full-stack apps.</p>
-    </div>
-
-    <div class="interest-card reveal">
-      <span class="interest-emoji">👗</span>
-      <div class="interest-name">Fashion</div>
-      <p class="interest-desc">Style as self-expression — where creativity meets culture and identity.</p>
-    </div>
-
-    <div class="interest-card reveal">
-      <span class="interest-emoji">🧠</span>
-      <div class="interest-name">Machine Learning</div>
-      <p class="interest-desc">Curious about how intelligent systems learn, adapt, and make decisions.</p>
-    </div>
-
+    <div class="interest-card reveal"><span class="interest-emoji">📈</span><div class="interest-name">Financial Markets</div><p class="interest-desc">Equity research, credit markets, and the art of finding signal in noise.</p></div>
+    <div class="interest-card reveal"><span class="interest-emoji">💻</span><div class="interest-name">Coding</div><p class="interest-desc">Building tools that solve real problems — from ML models to full-stack apps.</p></div>
+    <div class="interest-card reveal"><span class="interest-emoji">👗</span><div class="interest-name">Fashion</div><p class="interest-desc">Style as self-expression — where creativity meets culture and identity.</p></div>
+    <div class="interest-card reveal"><span class="interest-emoji">🧠</span><div class="interest-name">Machine Learning</div><p class="interest-desc">Curious about how intelligent systems learn, adapt, and make decisions.</p></div>
   </div>
 </section>
 
@@ -752,74 +587,37 @@
 
 <!-- PROJECTS -->
 <section id="projects">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span class="section-label-text">Work</span>
-  </div>
+  <div class="section-label"><div class="section-label-line"></div><span class="section-label-text">Work</span></div>
   <h2 class="section-title reveal">Projects</h2>
-
   <div class="projects-grid">
 
     <div class="project-card reveal">
-      <div class="project-card-top">
-        <div class="project-deco-circle pc1"></div>
-        <div class="project-deco-circle pc2"></div>
-        <div class="project-card-icon">✦</div>
-      </div>
-      <div class="project-card-body">
-        <div class="project-number">Project 01</div>
-        <div class="project-name">Your First Project</div>
-        <p class="project-desc">Describe what this project is, what problem it solves, and what technologies or skills you used to build it.</p>
-        <a href="#" class="project-link">View Project →</a>
-      </div>
+      <div class="project-card-top"><div class="project-deco-circle pc1"></div><div class="project-deco-circle pc2"></div><div class="project-card-icon">✦</div></div>
+      <div class="project-card-body"><div class="project-number">Project 01</div><div class="project-name">Your First Project</div><p class="project-desc">Describe what this project is, what problem it solves, and what technologies or skills you used to build it.</p><a href="#" class="project-link">View Project →</a></div>
     </div>
 
     <div class="project-card reveal">
-      <div class="project-card-top">
-        <div class="project-deco-circle pc1"></div>
-        <div class="project-deco-circle pc2"></div>
-        <div class="project-card-icon">◈</div>
-      </div>
-      <div class="project-card-body">
-        <div class="project-number">Project 02</div>
-        <div class="project-name">Your Second Project</div>
-        <p class="project-desc">Add a brief summary of this project — its purpose, your role, and any interesting challenges you overcame.</p>
-        <a href="#" class="project-link">View Project →</a>
-      </div>
+      <div class="project-card-top"><div class="project-deco-circle pc1"></div><div class="project-deco-circle pc2"></div><div class="project-card-icon">◈</div></div>
+      <div class="project-card-body"><div class="project-number">Project 02</div><div class="project-name">Your Second Project</div><p class="project-desc">Add a brief summary of this project — its purpose, your role, and any interesting challenges you overcame.</p><a href="#" class="project-link">View Project →</a></div>
     </div>
 
     <div class="project-card reveal">
-      <div class="project-card-top">
-        <div class="project-deco-circle pc1"></div>
-        <div class="project-deco-circle pc2"></div>
-        <div class="project-card-icon">⬡</div>
-      </div>
-      <div class="project-card-body">
-        <div class="project-number">Project 03</div>
-        <div class="project-name">Your Third Project</div>
-        <p class="project-desc">This could be a research paper, app, design system, or any creation you're proud of. Tell the world about it!</p>
-        <a href="#" class="project-link">View Project →</a>
-      </div>
+      <div class="project-card-top"><div class="project-deco-circle pc1"></div><div class="project-deco-circle pc2"></div><div class="project-card-icon">⬡</div></div>
+      <div class="project-card-body"><div class="project-number">Project 03</div><div class="project-name">Your Third Project</div><p class="project-desc">This could be a research paper, app, design system, or any creation you're proud of. Tell the world about it!</p><a href="#" class="project-link">View Project →</a></div>
     </div>
 
   </div>
 </section>
 
-<div class="section-divider" style="background: linear-gradient(to right, transparent, #3a2a2a, #3a2a2a, transparent);"></div>
+<div class="section-divider" style="background:linear-gradient(to right,transparent,#3a2a2a,#3a2a2a,transparent)"></div>
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-label">
-    <div class="section-label-line"></div>
-    <span class="section-label-text">Get in touch</span>
-  </div>
+  <div class="section-label"><div class="section-label-line"></div><span class="section-label-text">Get in touch</span></div>
   <h2 class="section-title reveal">Contact Details</h2>
-
   <div class="terminal-window reveal">
     <div class="terminal-titlebar">
-      <div class="terminal-dot red"></div>
-      <div class="terminal-dot yellow"></div>
-      <div class="terminal-dot green"></div>
+      <div class="terminal-dot red"></div><div class="terminal-dot yellow"></div><div class="terminal-dot green"></div>
       <div class="terminal-title">tanya@macbook ~ zsh</div>
     </div>
     <div class="terminal-body" id="terminalBody"></div>
@@ -827,140 +625,263 @@
 </section>
 
 <div class="section-divider"></div>
-
-<footer>
-  Crafted with care by <span>Tanya Pandey</span> · With love
-</footer>
+<footer>Crafted with care by <span>Tanya Pandey</span> · With love</footer>
 
 <script>
-  // TYPEWRITER WITH BACKSPACE LOOP
-  const nameText = "Tanya Pandey.";
-  const aboutText = "Hi I'm Tanya! a student at the UofT with a passion for the financial markets, coding and fashion. I love steep learning curves and building things that make a difference.";
+/* ── DISCO MUSIC ────────────────────────────────────────────────────
+   Uses Web Audio API to synthesise a fun upbeat disco loop entirely
+   in the browser — no external file needed, no copyright issues.
+   Pattern: four-on-the-floor kick + hi-hat + bass line + Rhodes stabs
+──────────────────────────────────────────────────────────────────── */
+let audioCtx = null;
+let discoNodes = [];  // nodes to stop when leaving disco
 
-  function typeChars(el, text, speed, cursorEl, onDone) {
-    let i = 0;
-    function step() {
-      if (i < text.length) {
-        el.insertBefore(document.createTextNode(text[i]), cursorEl);
-        i++;
-        setTimeout(step, speed);
-      } else {
-        if (onDone) onDone();
-      }
+function startDiscoMusic() {
+  if (discoNodes.length) return; // already playing
+  audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+  const ctx = audioCtx;
+  if (ctx.state === 'suspended') ctx.resume();
+
+  const master = ctx.createGain();
+  master.gain.value = 0.38;
+  master.connect(ctx.destination);
+
+  const bpm = 124;
+  const beat = 60 / bpm;        // seconds per beat
+  const bar  = beat * 4;
+
+  // ── Reverb convolver (simple impulse) ──
+  function makeReverb(dur = 1.2, decay = 2) {
+    const len    = ctx.sampleRate * dur;
+    const buf    = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++) {
+      const d = buf.getChannelData(ch);
+      for (let i = 0; i < len; i++) d[i] = (Math.random()*2-1) * Math.pow(1 - i/len, decay);
     }
-    step();
+    const c = ctx.createConvolver();
+    c.buffer = buf;
+    return c;
+  }
+  const rev = makeReverb();
+  rev.connect(master);
+
+  // ── Kick drum ──
+  function kick(t) {
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(150, t);
+    osc.frequency.exponentialRampToValueAtTime(40, t + 0.08);
+    env.gain.setValueAtTime(1, t);
+    env.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+    osc.connect(env); env.connect(master);
+    osc.start(t); osc.stop(t + 0.35);
+    discoNodes.push(osc);
   }
 
-  function deleteChars(el, cursorEl, speed, onDone) {
-    function step() {
-      const nodes = [];
-      for (const node of el.childNodes) {
-        if (node !== cursorEl && node.nodeType === Node.TEXT_NODE && node.textContent.length > 0) {
-          nodes.push(node);
-        }
-      }
-      if (nodes.length === 0) { if (onDone) onDone(); return; }
-      const last = nodes[nodes.length - 1];
-      last.textContent = last.textContent.slice(0, -1);
-      if (last.textContent === '') last.remove();
-      setTimeout(step, speed);
-    }
-    step();
+  // ── Hi-hat ──
+  function hihat(t, open=false) {
+    const bufSize = ctx.sampleRate * 0.1;
+    const buf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const d   = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) d[i] = Math.random()*2-1;
+    const src  = ctx.createBufferSource();
+    src.buffer = buf;
+    const bpf  = ctx.createBiquadFilter();
+    bpf.type = 'bandpass'; bpf.frequency.value = 8000; bpf.Q.value = 0.8;
+    const env  = ctx.createGain();
+    env.gain.setValueAtTime(open ? 0.28 : 0.18, t);
+    env.gain.exponentialRampToValueAtTime(0.001, t + (open ? 0.25 : 0.07));
+    src.connect(bpf); bpf.connect(env); env.connect(master);
+    src.start(t); src.stop(t + (open ? 0.3 : 0.1));
+    discoNodes.push(src);
   }
 
-  function initCursor(el) {
-    el.innerHTML = '';
-    const cursor = document.createElement('span');
-    cursor.className = 'cursor';
-    el.appendChild(cursor);
-    return cursor;
+  // ── Bass ──
+  function bass(t, freq, dur) {
+    const osc = ctx.createOscillator();
+    const env = ctx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    const lpf = ctx.createBiquadFilter();
+    lpf.type = 'lowpass'; lpf.frequency.value = 500;
+    env.gain.setValueAtTime(0.55, t);
+    env.gain.exponentialRampToValueAtTime(0.001, t + dur * 0.85);
+    osc.connect(lpf); lpf.connect(env); env.connect(master);
+    osc.start(t); osc.stop(t + dur);
+    discoNodes.push(osc);
   }
 
-  function runLoop(nameEl, aboutEl) {
-    const nameCursor = initCursor(nameEl);
-    const aboutCursor = initCursor(aboutEl);
-
-    function cycle() {
-      typeChars(nameEl, nameText, 80, nameCursor, () => {
-        setTimeout(() => {
-          typeChars(aboutEl, aboutText, 22, aboutCursor, () => {
-            setTimeout(() => {
-              deleteChars(aboutEl, aboutCursor, 14, () => {
-                deleteChars(nameEl, nameCursor, 55, () => {
-                  setTimeout(cycle, 600);
-                });
-              });
-            }, 2800);
-          });
-        }, 500);
-      });
-    }
-
-    cycle();
+  // ── Rhodes-ish stab ──
+  function stab(t, freq, dur=0.18) {
+    const osc  = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    const env  = ctx.createGain();
+    osc.type  = 'triangle'; osc.frequency.value = freq;
+    osc2.type = 'sine';     osc2.frequency.value = freq * 2.005; // slight detune
+    env.gain.setValueAtTime(0.22, t);
+    env.gain.exponentialRampToValueAtTime(0.001, t + dur);
+    osc.connect(env); osc2.connect(env);
+    env.connect(rev); env.connect(master);
+    osc.start(t); osc.stop(t+dur);
+    osc2.start(t); osc2.stop(t+dur);
+    discoNodes.push(osc, osc2);
   }
 
-  window.addEventListener('load', () => {
-    const nameEl = document.getElementById('heroName');
-    const aboutEl = document.getElementById('heroAbout');
-    setTimeout(() => runLoop(nameEl, aboutEl), 700);
-  });
-
-  // SCROLL REVEAL
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), 100);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
-
-  reveals.forEach(el => observer.observe(el));
-
-  // TERMINAL ANIMATION
-  const terminalLines = [
-    { type: 'cmd',    prompt: 'tanya@macbook ~ %', text: 'whoami' },
-    { type: 'output', text: '<span class="t-name">Tanya Pandey</span>' },
-    { type: 'blank' },
-    { type: 'cmd',    prompt: 'tanya@macbook ~ %', text: 'cat contact.txt' },
-    { type: 'output', text: 'Contact me at <a href="mailto:tanya.pandey@mail.utoronto.ca" class="t-email">tanya.pandey@mail.utoronto.ca</a>' },
-    { type: 'blank' },
-    { type: 'cmd',    prompt: 'tanya@macbook ~ %', text: '', cursor: true },
+  // ── Schedule bars in a loop ──
+  const BARS = 4;
+  // bass line: root A2(110Hz), D2(73.4), E2(82.4), A2
+  const bassLine = [110, 110, 73.4, 73.4, 82.4, 82.4, 110, 110];
+  // chord stabs (A minor voicing, transposing)
+  const chords = [
+    [220, 261.6, 329.6],   // Am
+    [220, 261.6, 329.6],
+    [146.8,174.6,220],     // Dm
+    [146.8,174.6,220],
+    [164.8,196,246.9],     // Em
+    [164.8,196,246.9],
+    [220, 261.6, 329.6],
+    [220, 261.6, 329.6],
   ];
 
-  function buildTerminal() {
-    const body = document.getElementById('terminalBody');
-    body.innerHTML = '';
-    terminalLines.forEach((line, i) => {
-      const div = document.createElement('div');
-      div.className = 'terminal-line';
-      if (line.type === 'blank') {
-        div.className += ' t-blank';
-        div.innerHTML = '&nbsp;';
-      } else if (line.type === 'cmd') {
-        div.innerHTML = `<span class="t-prompt">${line.prompt}</span><span class="t-cmd"> ${line.text}${line.cursor ? '<span class="terminal-cursor"></span>' : ''}</span>`;
-      } else if (line.type === 'output') {
-        div.innerHTML = `<span class="t-output">${line.text}</span>`;
-      }
-      body.appendChild(div);
-      setTimeout(() => div.classList.add('show'), 400 + i * 200);
-    });
+  let scheduleAhead = 0.1; // seconds
+  let scheduleInterval = 0.05; // seconds
+  let currentBar = 0;
+  let nextBarTime = ctx.currentTime + 0.05;
+
+  function scheduleBar(startT) {
+    const bl = bassLine[currentBar % bassLine.length];
+    const ch = chords[currentBar % chords.length];
+
+    for (let b = 0; b < 4; b++) {
+      const t = startT + b * beat;
+      kick(t);                          // 4-on-floor
+      hihat(t, false);                  // downbeat hat
+      hihat(t + beat*0.5, false);       // offbeat hat
+      hihat(t + beat*0.25, false);      // 16th hats
+      hihat(t + beat*0.75, false);
+      if (b % 2 === 0) hihat(t + beat*0.5, true); // open hat on 2&4 offbeat
+    }
+    // bass every half-beat
+    for (let h = 0; h < 8; h++) {
+      bass(startT + h * beat * 0.5, bl, beat * 0.42);
+    }
+    // stabs on beat 1 and 3
+    ch.forEach(f => { stab(startT,           f, beat * 0.3); });
+    ch.forEach(f => { stab(startT + beat*2,  f, beat * 0.3); });
+
+    currentBar++;
   }
 
-  let terminalBuilt = false;
-  const terminalObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !terminalBuilt) {
-        terminalBuilt = true;
-        setTimeout(buildTerminal, 300);
-      }
-    });
-  }, { threshold: 0.2 });
+  let loopTimer = setInterval(() => {
+    if (!discoNodes.length) { clearInterval(loopTimer); return; }
+    while (nextBarTime < ctx.currentTime + scheduleAhead + bar) {
+      scheduleBar(nextBarTime);
+      nextBarTime += bar;
+    }
+  }, scheduleInterval * 1000);
 
-  terminalObserver.observe(document.getElementById('contact'));
+  // schedule first bar immediately
+  scheduleBar(nextBarTime);
+  nextBarTime += bar;
+
+  discoNodes.push({ stop: () => clearInterval(loopTimer) }); // sentinel
+}
+
+function stopDiscoMusic() {
+  const ctx = audioCtx;
+  if (!ctx) return;
+  discoNodes.forEach(n => { try { n.stop(ctx.currentTime + 0.05); } catch(e){} });
+  discoNodes = [];
+}
+
+/* ── THEME SWITCHER ──────────────────────────── */
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  ['Light','Dark','Disco'].forEach(n => {
+    document.getElementById('btn'+n).classList.toggle('active', t === n.toLowerCase());
+  });
+  if (t === 'disco') {
+    startDiscoMusic();
+  } else {
+    stopDiscoMusic();
+  }
+  try { localStorage.setItem('tp-theme', t); } catch(e){}
+}
+
+try {
+  const saved = localStorage.getItem('tp-theme');
+  if (saved) {
+    setTheme(saved);
+    if (saved === 'disco') startDiscoMusic();
+  }
+} catch(e){}
+
+/* ── TYPEWRITER ──────────────────────────────── */
+const nameText  = 'Tanya Pandey.';
+const aboutText = "Hi I'm Tanya! a student at the UofT with a passion for the financial markets, coding and fashion. I love steep learning curves and building things that make a difference.";
+
+function typeChars(el, text, speed, cur, done) {
+  let i=0;
+  (function step(){ if(i<text.length){ el.insertBefore(document.createTextNode(text[i++]),cur); setTimeout(step,speed); } else if(done) done(); })();
+}
+function deleteChars(el, cur, speed, done) {
+  (function step(){
+    const ns=[...el.childNodes].filter(n=>n!==cur&&n.nodeType===Node.TEXT_NODE&&n.textContent.length);
+    if(!ns.length){if(done)done();return;}
+    const l=ns[ns.length-1]; l.textContent=l.textContent.slice(0,-1); if(!l.textContent)l.remove();
+    setTimeout(step,speed);
+  })();
+}
+function initCursor(el){ el.innerHTML=''; const c=document.createElement('span'); c.className='cursor'; el.appendChild(c); return c; }
+
+function runLoop(ne,ae){
+  const nc=initCursor(ne),ac=initCursor(ae);
+  (function cycle(){
+    typeChars(ne,nameText,80,nc,()=>setTimeout(()=>
+      typeChars(ae,aboutText,22,ac,()=>setTimeout(()=>
+        deleteChars(ae,ac,14,()=>deleteChars(ne,nc,55,()=>setTimeout(cycle,600)))
+      ,2800))
+    ,500));
+  })();
+}
+
+window.addEventListener('load',()=>setTimeout(()=>runLoop(
+  document.getElementById('heroName'),
+  document.getElementById('heroAbout')
+),700));
+
+/* ── SCROLL REVEAL ───────────────────────────── */
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),100); ro.unobserve(e.target); } });
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* ── TERMINAL ────────────────────────────────── */
+const tLines=[
+  {type:'cmd', prompt:'tanya@macbook ~ %', text:'whoami'},
+  {type:'output', text:'<span class="t-name">Tanya Pandey</span>'},
+  {type:'blank'},
+  {type:'cmd', prompt:'tanya@macbook ~ %', text:'cat contact.txt'},
+  {type:'output', text:'Contact me at <a href="mailto:tanya.pandey@mail.utoronto.ca" class="t-email">tanya.pandey@mail.utoronto.ca</a>'},
+  {type:'blank'},
+  {type:'cmd', prompt:'tanya@macbook ~ %', text:'', cursor:true},
+];
+function buildTerminal(){
+  const body=document.getElementById('terminalBody'); body.innerHTML='';
+  tLines.forEach((line,i)=>{
+    const div=document.createElement('div'); div.className='terminal-line';
+    if(line.type==='blank'){ div.classList.add('t-blank'); div.innerHTML='&nbsp;'; }
+    else if(line.type==='cmd'){ div.innerHTML=`<span class="t-prompt">${line.prompt}</span><span class="t-cmd"> ${line.text}${line.cursor?'<span class="terminal-cursor"></span>':''}</span>`; }
+    else{ div.innerHTML=`<span class="t-output">${line.text}</span>`; }
+    body.appendChild(div);
+    setTimeout(()=>div.classList.add('show'),400+i*200);
+  });
+}
+let tBuilt=false;
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting&&!tBuilt){ tBuilt=true; setTimeout(buildTerminal,300); } });
+},{threshold:.2}).observe(document.getElementById('contact'));
 </script>
 </body>
 </html>
-
-
